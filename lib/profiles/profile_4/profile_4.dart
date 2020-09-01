@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:profile_app/profiles/profile_4/profile_provider.dart';
 import 'package:profile_app/profiles/profile_4/user.dart';
+import 'package:profile_app/profiles/profile_5/profile_5.dart';
 
 class ProfileFour extends StatefulWidget {
   @override
@@ -156,11 +157,20 @@ class _ProfileFourState extends State<ProfileFour> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
-        CircleAvatar(
-          backgroundImage: AssetImage(
-            'assets/images/photo2.jpg',
+        GestureDetector(
+          onTap: (){
+            Navigator.push(context,MaterialPageRoute(
+              builder: (context){
+                return ProfileFive();
+              }
+            ));
+          },
+          child: CircleAvatar(
+            backgroundImage: AssetImage(
+              'assets/images/photo2.jpg',
+            ),
+            radius: 30,
           ),
-          radius: 30,
         ),
         SizedBox(
           width: 16,
