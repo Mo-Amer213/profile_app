@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:profile_app/profiles/profile_1/profile_provider.dart';
 import 'package:profile_app/profiles/profile_3/profile_provider.dart';
 import 'package:profile_app/profiles/profile_3/user.dart';
+import 'package:profile_app/profiles/profile_4/profile_4.dart';
 
 class ProfileThree extends StatefulWidget {
   @override
@@ -10,7 +11,26 @@ class ProfileThree extends StatefulWidget {
 
 class _ProfileThreeState extends State<ProfileThree> {
   Profile profileThree = ProfileProviderThree.getProfile();
+bool visible=false;
+bool visible2=false;
+@override
+  void initState() {
+    super.initState();
+setState(() {
+  Future.delayed(Duration(milliseconds: 500),(){
+    setState(() {
+      visible=true;
+    });
+  }).then( (value){
+    setState(() {
+      Future.delayed(Duration(milliseconds: 100),(){
+        visible2=true;
+      });
+    });
+  } );
+});
 
+  }
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -39,35 +59,19 @@ class _ProfileThreeState extends State<ProfileThree> {
                         height: 20,
                         color: Colors.black,
                       ),
-                      Container(
-                        width: double.infinity,
-                        height: 100,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: List.generate(
-                              10,
-                              (index) => Container(
-                                    margin: EdgeInsets.only(bottom: 16,top: 8,right: 8),
-                                    width: 100,
-                                    height: 100,
-                                    decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                                      image: DecorationImage(
-                                          image: ExactAssetImage(
-                                              'assets/images/photo3.jpg'),
-                                          fit: BoxFit.cover),
-                                    ),
-                                  )).toList(),
-                        ),
-                      ),
+                      buildListViewPictures(),
                       Column(crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text('About'),
                           SizedBox(height:40,),
-                          Text("some Text and this is just a Demo for a profile app ua_amer do and we don't add any functionality yet ya Potter\n"
-                              "some Text and this is just a Demo for a profile app ua_amer do and we don't add any functionality yet ya Potter\n"
-                              "some Text and this is just a Demo for a profile app ua_amer do and we don't add any functionality yet ya Potter\n"
-                              "some Text and this is just a Demo for a profile app ua_amer do and we don't add any functionality yet ya Potter\n",style: TextStyle(fontFamily: 'openSan',wordSpacing: 2,letterSpacing: 1.5),)
+                          AnimatedOpacity(
+                            duration: Duration(milliseconds: 300),
+                            opacity: visible?1:0,
+                            child: Text("some Text and this is just a Demo for a profile app ua_amer do and we don't add any functionality yet ya Potter\n"
+                                "some Text and this is just a Demo for a profile app ua_amer do and we don't add any functionality yet ya Potter\n"
+                                "some Text and this is just a Demo for a profile app ua_amer do and we don't add any functionality yet ya Potter\n"
+                                "some Text and this is just a Demo for a profile app ua_amer do and we don't add any functionality yet ya Potter\n",style: TextStyle(fontFamily: 'openSan',wordSpacing: 2,letterSpacing: 1.5),),
+                          )
                         ],
                       )
                     ],
@@ -82,16 +86,60 @@ class _ProfileThreeState extends State<ProfileThree> {
                 ),
               ),
             ),
-            Positioned(
-                top: MediaQuery.of(context).size.height*0.2-40,
-                left: MediaQuery.of(context).size.width / 2 - 30,
+            buildCircularAvatarContainerProfile3(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildListViewPictures() {
+    return Container(
+                      width: double.infinity,
+                      height: 100,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: List.generate(
+                            10,
+                            (index) => AnimatedContainer(
+                              curve: Curves.bounceOut,
+                              duration: Duration(milliseconds: 400),
+                                  margin: EdgeInsets.only(bottom: 16,top: 8,right: 8),
+                                  width: 100,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    image: DecorationImage(
+                                        image: ExactAssetImage(
+                                            'assets/images/photo3.jpg'),
+                                        fit: BoxFit.cover),
+                                  ),
+                                )).toList(),
+                      ),
+                    );
+  }
+
+  Widget buildCircularAvatarContainerProfile3(BuildContext context) {
+    double firstPosition=MediaQuery.of(context).size.height*0.2;
+    double secondPosition=MediaQuery.of(context).size.height*0.2-50;
+
+    return AnimatedPositioned(
+              duration: Duration(milliseconds: 200),
+              top: visible?secondPosition:firstPosition,
+              left: MediaQuery.of(context).size.width / 2 - 30,
 //              right: MediaQuery.of(context).size.width/2-50,
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                    return ProfileFour();
+                  }));
+                },
                 child: Container(
-                  height: 70,
-                  width: 70,
+                  height: 80,
+                  width: 80,
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: ExactAssetImage('assets/images/photo1.jpg'),
+                          image: ExactAssetImage('assets/images/photo2.jpg'),
                           fit: BoxFit.cover),
                       shape: BoxShape.circle,
                       boxShadow: [
@@ -104,15 +152,14 @@ class _ProfileThreeState extends State<ProfileThree> {
 //                child: CircleAvatar(
 //                  radius: 35,
 //                  backgroundImage: AssetImage('assets/images/photo2.jpg',),),
-                )),
-          ],
-        ),
-      ),
-    );
+                ),
+              ));
   }
 
-  Container buildBackgroundContainerProfile3(BuildContext context) {
-    return Container(
+  Widget buildBackgroundContainerProfile3(BuildContext context) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 200),
+            curve: Curves.bounceOut,
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
@@ -174,23 +221,29 @@ class _ProfileThreeState extends State<ProfileThree> {
     );
   }
 
-  Text buildProfileName() {
-    return Text(
-      profileThree.user.name,
-      style: TextStyle(
-          color: Colors.black,
-          fontFamily: 'openSan',
-          fontSize: 16,
-          fontWeight: FontWeight.bold),
+  Widget buildProfileName() {
+    return AnimatedOpacity(
+     duration: Duration(milliseconds: 200),
+      opacity: visible?1:0,
+      child: Text(
+        profileThree.user.name,
+        style: TextStyle(
+            color: Colors.black,
+            fontFamily: 'openSan',
+            fontSize: visible?16:8,
+            fontWeight: FontWeight.bold),
+      ),
     );
   }
 
   Widget buildFollowBtn() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 32),
+
+    return AnimatedPadding(
+      duration: Duration(milliseconds: 500),
+      padding: visible?const EdgeInsets.symmetric(vertical: 32):const EdgeInsets.symmetric(vertical:8),
       child: SizedBox(
         width: 150,
-        height: 40,
+        height:40,
         child: RaisedButton(
           elevation: 7,
           shape: RoundedRectangleBorder(

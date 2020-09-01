@@ -32,7 +32,6 @@ class _ProfileOneState extends State<ProfileOne> {
       });
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Theme(
